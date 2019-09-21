@@ -10,7 +10,7 @@ $factory->define(Post::class, function (Faker $faker) {
     return [
         'title' => $faker->sentence,
         'body' => $faker->sentence,
-        'image' => $faker->image('public/storage',640,480, null, false),
+        // 'image' => $faker->image('public/storage',640,480, null, false),
         'user_id' => User::inRandomOrder()->first()->id
     ];
 });
