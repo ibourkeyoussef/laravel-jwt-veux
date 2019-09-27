@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UsersResource;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        // $this->middleware('auth:api');
+    }
+
     public function index()
     {
-     return UsersResource::collection(User::latest()->get());
+     return UsersResource::collection(User::latest()->paginate(5));
+
     }
 
     /**
@@ -24,9 +27,17 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request,User $user)
     {
-        //
+        // dd($request->all());
+        $user=User::create(
+            [
+                'name'=> $request->name,
+                'email'=> $request->email,
+                'password'=> bcrypt($request->password),
+            ]
+        );
+        return response()->json(['status'=> 2001]);
     }
 
     /**
@@ -35,9 +46,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return new UsersResource($user);
     }
 
     /**
@@ -47,9 +58,30 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,User $user)
     {
-        //
+        // dd($request->all());
+        // $user->id;
+
+
+        $this->validate($request,[
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+            'password' => 'sometimes|required|min:8'
+        ]);
+
+        $user->update([
+            'name'=> $request->name,
+                'email'=> $request->email,
+                'password'=> bcrypt($request->password),
+        ]);
+        if ($user) {
+            # code...
+            return response()->json(['status'=>202, 'msg'=>'updated','user' => auth()->user()]);
+        }
+        return response()->json(['errors'=> errors]);
+
+
     }
 
     /**

@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+
         <title>Laravel</title>
 
         <!-- Fonts -->
@@ -15,5 +16,6 @@
     <body>
       <div id="app"></div>
       <script src="{{ asset('js/app.js') }}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     </body>
 </html>

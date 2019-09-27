@@ -33,7 +33,7 @@
         </div>
         <div class="form-group">
           <label for="last_name">Image :</label>
-          <input type="file" @change="upImage($event)" v-validate="'required|image:webp'" name="image" class="form-control" id="last_name" :class="{ 'is-invalid':errors.has('image') }" />
+          <input type="file" @change="upImage($event)" v-validate="'image'" name="image" class="form-control" id="last_name" :class="{ 'is-invalid':errors.has('image') }" />
          <div v-if="errors.has('image')" class="invalid-feedback">{{ errors.first('image') }}</div>
         </div>
 

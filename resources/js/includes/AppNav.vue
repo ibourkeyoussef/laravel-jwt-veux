@@ -12,7 +12,7 @@
                 <router-link class="nav-link" href="#" :to="{name:'home'}" >Home </router-link>
             </li>
             <li class="nav-item">
-                <router-link class="nav-link" href="#" :to="{name:'users'}" >Users </router-link>
+                <router-link class="nav-link" href="#" v-if="loggedIn" :to="{name:'users'}" >Users </router-link>
 
             </li>
 
@@ -26,11 +26,17 @@
 
             </li>
 
-            <li class="nav-item">
-                <router-link class="nav-link"  :to="{name:'login'}" >Login </router-link>
-            </li>
+
+
 
         </ul>
+        <ul class="navbar-nav ">
+             <li class="nav-item">
+                <router-link class="nav-link"  v-if="!loggedIn" :to="{name:'login'}" >Login </router-link>
+                 <a  v-else @click.prevent="signOut" href="#" class="nav-link" >Logout</a>
+            </li>
+        </ul>
+
 
     </div>
 </nav>
@@ -39,10 +45,33 @@
 
 <script>
     export default {
+ data() {
+     return {
+    //    logged: User.loggedIn(),
+    //    myUrl: "http://localhost:8000/api/auth/logout"
+     }
+   },
+   computed: {
+       loggedIn() {
+      return this.$store.getters.get_loggedIn;
+    }
+   },
+   methods: {
+     signOut() {
+      this.$store.dispatch('performLogoutAction')
+      .then(res=>{
 
+            this.$router.push({name: 'login'});
+
+        })
+        .catch(errors =>{
+            console.log(errors);
+
+        })
+     }
+
+   }
     }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="sc

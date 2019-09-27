@@ -3,31 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Post;
-use Faker\Provider\Image;
+
 use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        // $this->middleware('auth:api');
+    }
+
     public function index()
     {
         // return Post::with('user')->get();
-       return PostResource::collection(Post::latest()->get());
+       return PostResource::collection(Post::latest()->paginate(6));
     }
 
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-       dd($request->all());
+    //    dd($request->all());
        $data = $request->all();
-        $image_path=Storage::disk('storge-post')->put('image-post', $request->image);
-        $data['image']=$image_path;
+       if ($request->image) {
+           # code...
+           $image_path=Storage::disk('storge-post')->put('image-post', $request->image);
+           $data['image']=$image_path;
+       }
         $post= Post::create($data);
     }
 
@@ -49,18 +54,17 @@ class PostController extends Controller
         $currentPhoto = $post->image;
         $name = time().'.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
 
-     \Image::make($request->image)->save(public_path('storge-post/').$name);
+     Image::make($request->image)->save(public_path('storage/image-post/').$name)->resize(30, 20);
+
      $request->merge(['image' => $name]);
 
       $userPhoto = public_path('image-post/').$currentPhoto;
       if(file_exists($userPhoto)){
     @unlink($userPhoto);
       }
-      $post->update($request->all());
-        // $post->update([
-        //     'title'=> $request->title,
-        //     'body'=> $request->body,
-        // ]);
+
+      $post->update($data);
+
         return response()->json(['msg'=> 'update', 'status' => 202]);
     }
 

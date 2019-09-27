@@ -15,7 +15,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        return TagResource::collection(Tag::latest()->get());
+        return TagResource::collection(Tag::latest()->paginate(4));
     }
 
 
@@ -53,7 +53,7 @@ class TagController extends Controller
     public function destroy(Tag $tag)
     {
         // dd($tag);
-        Tag::delete($tag);
+        $tag->delete();
        return response()->json(['status' => 204]);
     }
 }

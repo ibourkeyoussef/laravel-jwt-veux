@@ -8,12 +8,14 @@
           <label for="first_name">Name tag :</label>
           <input
             type="text"
-            v-validate="'required'"
+            v-validate="'required|min:10'"
             name="name"
+            autocomplete="off"
             v-model="tag.name"
             class="form-control"
+            :class="{'is-invalid': errors.first('name')}"
           />
-          <p v-if="errors.has('name')">{{ errors.first('name')}}</p>
+          <div v-if="errors.has('name')" class="invalid-feedback" >{{ errors.first('name')}}</div>
         </div>
 
         <input type="submit" value="Create" />
@@ -21,6 +23,7 @@
     </div>
     <br />
     <br />
+    {{$data}}
 
     <router-link class="btn btn-sm btn-dark" :to="{name:'tag-index'}">Back</router-link>
   </div>

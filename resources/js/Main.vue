@@ -1,22 +1,25 @@
 <template>
   <div>
 
-    <div class="container">
+    <div class="container mb-5">
      <app-nav></app-nav>
-      <transition name="fade out">
+      <transition name="fade out" >
         <router-view />
       </transition>
     </div>
+      <app-footer></app-footer>
 
   </div>
 </template>
 
 <script>
 import  AppNav from './includes/AppNav'
+import  AppFooter from './includes/AppFooter'
 export default {
   name: "app",
   components: {
-    'app-nav':AppNav
+    'app-nav':AppNav,
+    'app-footer':AppFooter
   }
 };
 </script>

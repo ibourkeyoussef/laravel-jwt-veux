@@ -10,12 +10,12 @@ import Login from './../views/auth/login.vue'
 
 
 const routes=[
-    {path:'/',component:Home,name:'home'},
+    {path:'/',component:Home,name:'home' , meta: { forAuth: true }},
     ...user,
     ...tag,
     ...post,
 
-    {path:'/login',component:Login,name:'login'},
+    {path:'/login',component:Login,name:'login',meta:{guest:true}},
     // {path:'/posts',component:Post,name:'post-index'},
     // {path:'/post/create',component:PostCreate,name:'post-create'},
 

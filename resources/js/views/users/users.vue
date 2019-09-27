@@ -19,7 +19,7 @@
               <th>Action</th>
           </tr>
       </thead>
-      <tbody>
+      <tbody >
           <tr v-for="(user,index) in users" :key="index">
               <td scope="row">{{index+1}}</td>
               <td>{{user.name}}</td>
@@ -29,9 +29,20 @@
                   <router-link class="btn btn-warning btn-sm" :to="{name:'edit',params:{id:user.id}}">Update</router-link>
                   <button @click.prevent="del(user.id)" class="btn btn-danger btn-sm">Del</button>
               </td>
+
           </tr>
+
+
+           <infinite-loading spinner="bubbles"  @infinite="infiniteHandler">
+        	<span slot="no-more">
+        		No data
+        	</span>
+        </infinite-loading>
+
       </tbody>
   </table>
+
+
 </div>
 
 </div>
@@ -39,27 +50,49 @@
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading';
     export default {
+         components: {
+    InfiniteLoading,
+  },
 data() {
+
     return {
-        users:[]
+        users:[],
+        page:1
+    //      limit: 10,
+    // busy: false
     }
 },
+mounted() {
+    this.infiniteHandler();
+},
 methods: {
-    load_users(){
-        axios.get('http://localhost:8000/api/user')
-    .then(({data}) =>{
-        this.users=data.data;
-
-    })
+       infiniteHandler($state) {
+      axios.get('http://localhost:8000/api/user', {
+        params: {
+          page: this.page,
+        },
+      }).then(({ data }) => {
+        if (data.data.length) {
+          this.page += 1;
+          this.users.push(...data.data);
+          setTimeout(() => {
+						$state.loaded();
+					}, 1000);
+        } else {
+          $state.complete();
+        }
+      });
     },
+
     del(user){
         if (confirm()) {
 
             axios.delete(`http://localhost:8000/api/user/${user}`)
             .then(res =>{
                console.log('del');
-               this.load_users()
+               this.infiniteHandler()
 
             })
             .catch(errors=>{
@@ -70,9 +103,7 @@ methods: {
     }
 
 },
-mounted() {
-    this.load_users();
-},
+
     }
 </script>
 
