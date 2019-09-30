@@ -50,20 +50,19 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        // dd($request->all());
-        $currentPhoto = $post->image;
-        $name = time().'.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+        //  dd( $request->all());
+        $data = $request->all();
 
-     Image::make($request->image)->save(public_path('storage/image-post/').$name)->resize(30, 20);
+        if($request->hasFile('image')){
+          Storage::disk('storge-post')->delete($post->image);
+          $data['image'] = Storage::disk('storge-post')->put('image-post', $request->image);
+        }else{
+            $data = $request->except('image');
+        }
 
-     $request->merge(['image' => $name]);
+        $post->update($data);
 
-      $userPhoto = public_path('image-post/').$currentPhoto;
-      if(file_exists($userPhoto)){
-    @unlink($userPhoto);
-      }
 
-      $post->update($data);
 
         return response()->json(['msg'=> 'update', 'status' => 202]);
     }

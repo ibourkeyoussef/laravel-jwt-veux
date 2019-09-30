@@ -2,12 +2,12 @@
   <div>
 
     <div class="container mb-5">
-     <app-nav></app-nav>
+     <app-nav  > </app-nav>
       <transition name="fade out" >
         <router-view />
       </transition>
     </div>
-      <app-footer></app-footer>
+      <app-footer> </app-footer>
 
   </div>
 </template>
@@ -16,6 +16,7 @@
 import  AppNav from './includes/AppNav'
 import  AppFooter from './includes/AppFooter'
 export default {
+
   name: "app",
   components: {
     'app-nav':AppNav,

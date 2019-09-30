@@ -45,8 +45,10 @@
 
 <script>
     export default {
+
  data() {
      return {
+
     //    logged: User.loggedIn(),
     //    myUrl: "http://localhost:8000/api/auth/logout"
      }

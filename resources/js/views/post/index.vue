@@ -1,17 +1,35 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-6 my-2" v-for="post in posts" :key="post.id">
+      <div class="col-md-4 my-2" v-for="post in posts" :key="post.id">
         <div class="card">
           <router-link :to="{name:'post-show',params:{id:post.id}}">
-            <img class="card-img-top" src="https://source.unsplash.com/random" height="200" alt />
+            <img
+              class="card-img-top"
+              :src="`http://localhost:8000/storage/${post.image}`"
+              height="200"
+              alt
+            />
+            </router-link>
             <div class="card-body">
               <h4 class="card-title">{{post.title}}</h4>
               <p class="card-text">{{post.body}}</p>
               <hr />
               <p class="card-text">{{post.username}}</p>
             </div>
-          </router-link>
+            <div class="card-footer">
+              <div class="text-center">
+              <router-link
+                class="btn btn-sm btn-warning"
+                :to="{name:'post-edit',params:{id:post.id}}"
+              >
+                <i class="fas fa-edit"></i>
+              </router-link>
+
+               <button class="btn btn-sm btn-danger ml-3"><i class="fas fa-trash    "></i></button>
+              </div>
+            </div>
+
         </div>
       </div>
 
@@ -27,12 +45,16 @@
 </template>
 
 <script>
+import message from "./message.vue";
 import { mapGetters } from "vuex";
 import InfiniteLoading from "vue-infinite-loading";
 export default {
   components: {
-    InfiniteLoading
+    InfiniteLoading,
+    "app-message": message
   },
+  props: ["msg"],
+
   data() {
     return {
       posts: [],

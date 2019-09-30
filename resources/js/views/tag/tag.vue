@@ -5,8 +5,9 @@
     <div class="row">
       <div class="col-md-8 mx-auto">
         <table class="table">
-          <thead>
-            <tr>
+          <thead >
+
+            <tr >
               <th>#</th>
               <th>name</th>
               <th>Action</th>
@@ -29,6 +30,8 @@
         <div class="card-footer">
           <pagination :data="tags" @pagination-change-page="getResults"></pagination>
         </div>
+
+
       </div>
     </div>
   </div>
@@ -36,12 +39,17 @@
 
 <script>
 export default {
+
   data() {
     return {
       tags: {}
+
     };
+
+
   },
   methods: {
+
     getResults(page = 1) {
       axios
         .get("http://localhost:8000/api/tag?page=" + page)

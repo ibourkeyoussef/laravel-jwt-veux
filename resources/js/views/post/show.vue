@@ -4,7 +4,7 @@
            <div class="col-md-6 mx-auto">
 
      <div class="card" >
-       <img class="card-img-top" src="https://source.unsplash.com/random" alt="">
+       <img class="card-img-top" :src="`http://localhost:8000/storage/${post.image}`" alt="">
        <div class="card-body">
          <h4 class="card-title" v-text="post.title"></h4>
          <p class="card-text" v-text="post.body" ></p>

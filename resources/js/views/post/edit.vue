@@ -50,6 +50,11 @@
 
 <script>
 export default {
+  head() {
+    return {
+      title: "Edit"
+    };
+  },
   data() {
     return {
       post: {
@@ -72,30 +77,29 @@ export default {
   },
   methods: {
     UpdatePost() {
-        // console.log(this.post.image);
+      // console.log(this.post.image);
 
       this.$validator.validate().then(valid => {
         if (valid) {
           const url = `http://localhost:8000/api/post/${this.$route.params.id}`;
-          axios.put(url,this.post).then(res => {
-            //   this.$route.push({name:'post-index'})
+
+
+          let formdata = new FormData();
+          Object.keys(this.post).forEach(key =>
+            formdata.append(key, this.post[key])
+          );
+
+          formdata.append("_method", "PATCH");
+
+          axios.post(url, formdata).then(res => {
+              this.$router.push({name:'post-index'})
           });
         }
       });
     },
     UImage(event) {
-    //   this.post.image = event.target.files[0];
-    //   console.log(this.post);
+      this.post.image = event.target.files[0];
 
-         this.post.image=event.target.files[0];
-       let file = event.target.files[0];
-      let reader = new FileReader();
-
-      reader.onloadend = (file) => {
-          this.post.image = reader.result;
-      }
-      reader.readAsDataURL(file);
-      console.log( reader);
     }
   }
 };

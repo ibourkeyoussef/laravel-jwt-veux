@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Created</h1>
-
+        {{title}}
     <div class="row">
       <form class="col-md-8 mix-auto" @submit.prevent="store_tag">
         <div class="form-group">
@@ -9,16 +9,16 @@
           <input
             type="text"
             v-validate="'required|min:10'"
-            name="name"
+            name="h"
             autocomplete="off"
             v-model="tag.name"
             class="form-control"
-            :class="{'is-invalid': errors.first('name')}"
+            :class="{'is-invalid': errors.first('h')}"
           />
-          <div v-if="errors.has('name')" class="invalid-feedback" >{{ errors.first('name')}}</div>
+          <div v-if="errors.has('h')" class="invalid-feedback" >{{ errors.first('h')}}</div>
         </div>
 
-        <input type="submit" value="Create" />
+        <input type="submit" :disabled="errors.has('h')" :class="{disabledButton:errors.has('h')}" value="Create" />
       </form>
     </div>
     <br />
@@ -35,8 +35,17 @@ export default {
     return {
       tag: {
         name: ""
-      }
+      },
+      name:'Youssef',
+      p:'Ibourke'
     };
+  },
+  computed: {
+      title(){
+          console.log('computed');
+
+          return `${this.name}       ${this.p}`;
+      }
   },
   methods: {
     store_tag() {
